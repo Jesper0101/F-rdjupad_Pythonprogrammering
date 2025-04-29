@@ -1,94 +1,139 @@
-📊 Fördjupad Pythonprogrammering – Country Comparison Data Pipeline
-This project demonstrates an end-to-end ETL pipeline built in Python. It covers the extraction of country comparison data, cleaning specific fields, and saving it into a SQLite database. The project uses modular design with clear logging to track the entire data pipeline.
+# Fördjupad Pythonprogrammering – Country Comparison Data Pipeline
 
-📁 Project Structure
-graphql
-Kopiera
-Redigera
+A modular Python ETL pipeline for processing and analyzing country comparison data, demonstrating advanced programming techniques with proper logging and error handling.
+
+## Project Structure
+```bash 
 Fördjupad_Pythonprogrammering/
-├── api.py                  # Class to load data from a CSV file
-├── datacleaner.py          # Class to clean specific columns in the dataset
-├── datasaver.py            # Class to save the cleaned data to a SQLite database
-├── main.py                 # Main script that integrates the pipeline
+├── api.py                  # Loads data from a CSV file
+├── datacleaner.py          # Cleans specific fields in the dataset
+├── datasaver.py            # Saves the cleaned data to a SQLite database
+├── main.py                 # Main script that ties everything together
 ├── country_comparison_dataset.csv  # Dataset used for the analysis
-├── history_plot.png        # Optional plot or diagram
-├── log.log                 # Generated log file (after running the pipeline)
+├── history_plot.png        # Optional visualization or schedule diagram
+├── log.log                 # Generated log file (after running)
 ├── README.md               # Project documentation
-🧠 Project Overview
-This Python project builds a data pipeline that:
+```
 
-Extracts data from a CSV file via api.py.
+## Project Overview
+This project implements a basic ETL (Extract, Transform, Load) pipeline using pandas, regular expressions, and SQLite:
 
-Cleans specific fields (such as GDP) using datacleaner.py.
+- **Extract** – Read a dataset from a CSV file using `api.py`.
+- **Transform** – Clean the GDP (in Trillions USD) column using `datacleaner.py`.
+- **Load** – Save the cleaned dataset to an SQLite database using `datasaver.py`.
 
-Loads the cleaned data into an SQLite database using datasaver.py.
+The pipeline handles country comparison data including GDP, population, and other metrics for various countries with proper error handling and logging throughout the process.
 
-Key Features:
-Logging: Each part of the pipeline logs its activity to ensure smooth debugging and tracking.
+## Dataset Information
+The dataset contains comparison metrics for multiple countries including:
+- Country names
+- Population figures
+- GDP values (in Trillions USD)
+- Military spending
+- Geographic data
+- And more
 
-Data Pipeline: Fetch → Clean → Save. The modules interact seamlessly to process the dataset.
+The primary cleaning operation focuses on the GDP column, which requires reformatting from strings (like "$21.4T") to proper floating-point values (21.4).
 
-📦 Requirements
-You need Python 3.7+ installed along with the required packages. Install them using:
+## Requirements
+Make sure you have Python 3.7+ and the following packages installed:
+```bash
+pip install pandas numpy sqlite3
+```
 
-bash
-Kopiera
-Redigera
-pip install pandas sqlite3
-🚀 How to Run
+## Configuration
+Key configuration options can be modified in the respective modules:
+- Input file path: Set in `api.py`
+- Database name: Set in `datasaver.py` (default: `database.db`)
+- Log file path: Set in `main.py` (default: `log.log`)
+
+## How to Run
 Clone the repository:
 
-bash
-Kopiera
-Redigera
+```bash
 git clone https://github.com/Jesper0101/F-rdjupad_Pythonprogrammering.git
 cd F-rdjupad_Pythonprogrammering
-Ensure the dataset country_comparison_dataset.csv is available at the specified path, or update the file_path in api.py.
+```
+
+Make sure the dataset file `country_comparison_dataset.csv` is located in the correct path or update `api.py` to reflect its location.
 
 Run the main script:
 
-bash
-Kopiera
-Redigera
+```bash
 python main.py
-This will:
+```
 
-Fetch the raw data from the dataset.
+On successful execution:
+- A cleaned version of the dataset is saved to `database.db` in the `cleaned_data` table.
+- Logs are recorded in `log.log`.
 
-Clean the data (removing non-numeric GDP values).
+## Example Data Transformation
 
-Save the cleaned data into an SQLite database (database.db).
+Before cleaning:
+```
+Country  GDP (in Trillions USD)  Population
+USA      $21.4T                  331 million
+China    $14.3T                  1.4 billion
+Japan    $5.1T                   126 million
+```
 
-Check the log file (log.log) for details on the pipeline progress, such as fetching data, cleaning, and saving.
+After cleaning:
+```
+Country  GDP (in Trillions USD)  Population
+USA      21.4                    331 million
+China    14.3                    1.4 billion
+Japan    5.1                     126 million
+```
 
-🛠 Module Breakdown
-api.py
-Fetches the dataset from a CSV file.
+## Module Breakdown
 
-Includes logging for success, errors (file not found, empty file), and progress.
+### api.py
+- Loads the dataset using `pandas.read_csv`.
+- Includes logging and error handling for missing or empty files.
+- Returns a pandas DataFrame or raises an exception if the file is inaccessible.
 
-datacleaner.py
-Cleans the GDP (in Trillions USD) column by removing any non-numeric characters.
+### datacleaner.py
+- Cleans the GDP (in Trillions USD) column using regular expressions.
+- Converts the cleaned data into floats, handling invalid entries with NaN.
+- Provides detailed logging of the cleaning process.
 
-Ensures that invalid data (such as text in the GDP field) is replaced with NaN.
+### datasaver.py
+- Saves a DataFrame into a SQLite database using `sqlite3`.
+- Creates or replaces the `cleaned_data` table.
+- Includes error handling for database operations.
 
-datasaver.py
-Saves the cleaned data into an SQLite database (database.db).
+### main.py
+- Orchestrates the pipeline: load → clean → save.
+- Sets up logging configuration for the entire application.
+- Provides proper error handling and execution flow.
 
-Handles errors related to database operations and logs progress.
+## Logging Details
+The application logs information at multiple levels:
+- INFO: General progression through the pipeline stages
+- WARNING: Non-critical issues (e.g., missing values)
+- ERROR: Critical problems that prevent successful execution
+- DEBUG: Detailed information useful for troubleshooting
 
-main.py
-Coordinates the data pipeline by:
+Log entries include timestamps and the module that generated them for easy debugging.
 
-Fetching the data from the CSV file using api.py.
+## Error Handling
+The pipeline handles several error scenarios:
+- Missing input files
+- Corrupt data in the CSV
+- Database connection issues
+- Invalid data types
 
-Cleaning the data using datacleaner.py.
+If you encounter an error, check the log file for details about what went wrong and where.
 
-Saving the cleaned data to SQLite using datasaver.py.
+## Dataset
+Download the dataset from:
 
-Logs the entire process, including any issues that arise.
+[Country Comparison Dataset (USA & More) – Kaggle](https://www.kaggle.com/datasets/waqi786/country-comparison-dataset-usa-and-more#)
 
-Logging Configuration (main.py)
-Configures logging for the entire pipeline to track the progress of fetching, cleaning, and saving data.
+## License
+This project is open-source and available under the [MIT License](https://mit-license.org/).
 
-Logs are stored in the file log.log, and each step in the pipeline is logged with timestamped entries.
+## Author
+Jesper – [GitHub Profile](https://github.com/Jesper0101)
+
+For questions or suggestions, feel free to open an issue!
