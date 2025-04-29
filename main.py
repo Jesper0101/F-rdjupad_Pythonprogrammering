@@ -6,7 +6,7 @@ from datasaver import DataSaver
 
 # Creating a logging configuration
 logging.basicConfig(
-    filename='C:/Users/dogsh/OneDrive/Dokument/Python Kurs/.venv/Kunskapskontroll2/log.log',
+    filename='/log.log',
     format='[%(asctime)s][%(name)s]%(message)s',
     datefmt='%Y-%m-%d %H:%M:%S',
     level=logging.INFO)
