@@ -8,7 +8,7 @@ class API:
         self.logger = logging.getLogger(__name__)
         
         # Defines file path as an instance
-        self.file_path = 'C:/Users/dogsh/OneDrive/Dokument/Python Kurs/.venv/Kunskapskontroll2/country_comparison_dataset.csv'
+        self.file_path = '/country_comparison_dataset.csv'
                 
     # Creates a function to fetch data and raise any error and logging it
     def fetch_data(self):
